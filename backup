@@ -1,0 +1,44 @@
+# Antiga idéia de plotar linhas indicando a quantidade de pacientes para cada idade em intervalos de 10 anos
+
+# Retorna quantidade total de pacientes analizados
+total = len(df)
+all_ages = [int(i) for i in df["age"]]
+
+# Recebe DataFrame e retorna 2 parametros: Inteiro contendo quantidade total de linhas e
+# dicionário contendo quantidade de idades para cada intervalo em intervalos de 10 (anos)
+def process_df(dataframe):
+    total = len(dataframe)
+
+    # Retorna idades e as coloca em ordem crescente
+    ages = [int(i) for i in dataframe["age"]]
+    ages.sort()    
+
+    # Cria lista contendo intervalos de 10 anos desde a menor idade até a maior idade
+    ranges = [i for i in range(min(all_ages), max(all_ages), 10)]
+    ages_intervals = {}       
+
+    for i in ranges:
+        ages_intervals[int(i/10)*10] = 0
+    
+    for age in ages:
+        for interval in ages_intervals.keys():
+            if age in range(interval, interval+10):
+                ages_intervals[interval] += 1
+
+    return total, ages_intervals
+
+
+
+# Retorna quantidade de pacientes com colesterol alto
+highchol_fbs = process_df(df[
+    (df['chol'] > 240.0) & 
+    (df['fbs'] == 1)
+    ])
+
+all = [highchol_fbs[1]]
+
+#ax2 = ax.twinx()  
+#y3_axis = np.array([highchol["age_avg"], fbs["age_avg"], leftvh["age_avg"], highchol_fbs["age_avg"], highchol_fbs_leftvh["age_avg"]])
+#ax2.plot(x_axis, y3_axis, marker="o", color="black")
+#ax2.set_yticks(np.arange(50,60,1))
+#ax2.set_ylabel("MÉDIA IDADE", size=30, labelpad=30)
